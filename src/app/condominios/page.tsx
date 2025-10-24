@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import { ICondominio } from '@/services/condominio.service';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useRouter } from 'next/navigation';
 
 export default function ListaCondominios() {
   const [condominios, setCondominios]= useState<ICondominio[]>([])
   const [erro, setErro] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     const buscarCondominios = async () => {
       try {
