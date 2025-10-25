@@ -59,7 +59,7 @@ export default function Menu() {
 
                 <div className="mt-auto">
                     <ul className="space-y-2">
-                        <li>
+                        <li className=" hover:text-red-600">
                         <button type="button" onClick={logout} className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-2 text-left text-gray-700 transition-all hover:bg-gray-100 hover:text-red-600">
                             <FaSignOutAlt className="h-4 w-4 text-gray-400 hover:text-red-600" />
                             Sair

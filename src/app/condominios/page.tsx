@@ -50,23 +50,22 @@ export default function ListaCondominios() {
         <h1 className="text-xl font-semibold">Condomínios</h1>
       </div>
 
-      <input type="text" placeholder='Pesquisar' value={query} onChange={(e) => setQuery(e.target.value)} className="border border-gray-300 rounded-lg mb-5 p-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+      <input type="text" placeholder='Pesquisar' value={query} onChange={(e) => setQuery(e.target.value)} className="border border-gray-300 rounded-lg bg-zinc-200 mb-5 p-2 text-gray-900 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
 
-      <div className="bg-white rounded-md border border-gray-200 overflow-hidden">
+      <div className=" rounded-md border border-gray-200 overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+          <thead className="bg-zinc-300">
             <tr>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider w-12">#</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider">Nome</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider">Endereço</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider">Cidade</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider">UF</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider">Tipo</th>
-              {/* tipo: Residencial e comercial*/}          
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider">Tipo</th>       
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 tracking-wider">Ação</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
+          <tbody className="divide-y divide-zinc-200 bg-zinc-200">
              {loading ? (
               <tr>
                 <td colSpan={7} className="px-4 py-3 text-center text-gray-500">
@@ -87,7 +86,7 @@ export default function ListaCondominios() {
               </tr>
             ) : (
               condominiosFiltrados.map((condominio, index) => (
-                <tr key={condominio.id_condominio} className="hover:bg-gray-50">
+                <tr key={condominio.id_condominio} className="hover:bg-gray-100">
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{String(index + 1)}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{condominio.nome_condominio}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{condominio.endereco_condominio}</td>
