@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react'
 import { ICondominio } from '@/services/condominio.service';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
+import { queryObjects } from 'v8';
 
 export default function ListaCondominios() {
   const [condominios, setCondominios]= useState<ICondominio[]>([])
   const [erro, setErro] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     const buscarCondominios = async () => {
@@ -28,11 +30,27 @@ export default function ListaCondominios() {
     buscarCondominios()
   }, [])
 
+  const condominiosFiltrados = condominios.filter((condominio) =>{
+    const termoBusca = query.trim().toLowerCase();
+
+    return (
+      condominio.nome_condominio.toLowerCase().includes(termoBusca) ||
+      condominio.endereco_condominio.toLowerCase().includes(termoBusca) ||
+      condominio.cidade_condominio.toLowerCase().includes(termoBusca) ||
+      condominio.uf_condominio.toLowerCase().includes(termoBusca)||
+      condominio.tipo_condominio.toLowerCase().includes(termoBusca)
+    );
+
+
+  });
+
   return (
     <div className="p-6 max-w-full">
       <div className="mb-4 flex items-center justify-between gap-4">
         <h1 className="text-xl font-semibold">Condomínios</h1>
       </div>
+
+      <input type="text" placeholder='Pesquisar' value={query} onChange={(e) => setQuery(e.target.value)} className="border border-gray-300 rounded-lg mb-5 p-2 text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
 
       <div className="bg-white rounded-md border border-gray-200 overflow-hidden">
         <table className="min-w-full divide-y divide-gray-200">
@@ -68,7 +86,7 @@ export default function ListaCondominios() {
                 </td>
               </tr>
             ) : (
-              condominios.map((condominio, index) => (
+              condominiosFiltrados.map((condominio, index) => (
                 <tr key={condominio.id_condominio} className="hover:bg-gray-50">
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{String(index + 1)}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{condominio.nome_condominio}</td>
