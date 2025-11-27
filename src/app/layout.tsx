@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Menu from "../components/menu";
 import { createClient } from "@/utils/supabase/server";
+import { Toaster } from "sonner";
 
 const supabase = createClient();
 
@@ -17,8 +18,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Gestão de Condomínios",
-  description: "Aplicação para gestão de condomínios",
+  title: "",
+  description: "",
 };
 
 export default async function RootLayout({
@@ -42,6 +43,7 @@ export default async function RootLayout({
 
         <div className={`${showMenu ? "ml-64" : ""} flex-1 p-6`}>{children}</div>
         {/* {children} */}
+        <Toaster position="bottom-right" expand={true} richColors/> 
       </body>
     </html>
   );
