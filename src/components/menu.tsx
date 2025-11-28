@@ -27,10 +27,10 @@ export default function Menu() {
 
     return (
         <aside
-            className="fixed left-0 top-0 flex h-screen w-64 flex-col bg-gray p-4 shadow-md">
+            className="fixed left-0 top-0 flex h-screen w-64 flex-col bg-white p-4 shadow-md">
             {/* Logo */}
             <div className="mb-8 flex items-center gap-2 px-4">
-            Gestão de Condomínios
+            Viva Condo
             </div>
 
             {/* Menu Items */}
@@ -43,7 +43,7 @@ export default function Menu() {
                         <Link href={href}
                             className={`flex items-center gap-3 rounded-lg px-4 py-2 transition-all ${
                             active
-                                ? "bg-[#ffffff] font-medium text-[#4f72ee]"
+                                ? "bg-[#E6EEFE] font-medium text-[#4f72ee]"
                                 : "text-gray-700 hover:bg-gray-100"
                             }`}
                         >
@@ -59,9 +59,9 @@ export default function Menu() {
 
                 <div className="mt-auto">
                     <ul className="space-y-2">
-                        <li className=" hover:text-red-600">
-                        <button type="button" onClick={logout} className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-2 text-left text-gray-700 transition-all hover:bg-gray-100 hover:text-red-600">
-                            <FaSignOutAlt className="h-4 w-4 text-gray-400 hover:text-red-600" />
+                        <li>
+                        <button type="button" onClick={logout} className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-2 text-left text-gray-700 transition-all hover:bg-gray-100">
+                            <FaSignOutAlt className="h-4 w-4 text-gray-400" />
                             Sair
                         </button>
                         </li>

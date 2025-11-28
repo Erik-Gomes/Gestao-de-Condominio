@@ -1,16 +1,20 @@
 "use client";
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'  //useState é uma função do React que permite a um componente ter estado interno. 
 import { ICondominio } from '@/services/condominio.service';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { useRouter } from 'next/navigation';
-import { queryObjects } from 'v8';
+import { DropdownActions } from "@/components/dropdown";
+import { ConfirmDialog } from "@/components/confirmDialog";
+import { showToast } from '@/components/toastNotification';
 
 export default function ListaCondominios() {
   const [condominios, setCondominios]= useState<ICondominio[]>([])
   const [erro, setErro] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState<number | null>(null); 
+  const [selectedName, setSelectedName] = useState("");
 
   useEffect(() => {
     const buscarCondominios = async () => {
@@ -30,6 +34,31 @@ export default function ListaCondominios() {
     buscarCondominios()
   }, [])
 
+  const handleDeleteConfirm = async () => {
+    if (!selectedId) return;
+
+    try {
+      
+        const response = await fetch(`/api/condominios/${selectedId}`, {
+            method: 'DELETE',
+        });
+        
+        const result = await response.json();
+
+        if (result.success) {
+            // Remove o item da lista visualmente sem precisar recarregar
+            setCondominios((prev) => prev.filter((c) => c.id_condominio !== selectedId));
+            showToast("success", "Condomínio excluído com sucesso!");
+        } else {
+            showToast("error", result.error || "Erro ao excluir condomínio.");
+        }
+    } catch (error) {
+        showToast("error", "Erro de conexão ao tentar excluir.");
+    } finally {
+        setDeleteDialogOpen(false); // Fecha o modal
+    }
+  };
+
   const condominiosFiltrados = condominios.filter((condominio) =>{
     const termoBusca = query.trim().toLowerCase();
 
@@ -40,8 +69,6 @@ export default function ListaCondominios() {
       condominio.uf_condominio.toLowerCase().includes(termoBusca)||
       condominio.tipo_condominio.toLowerCase().includes(termoBusca)
     );
-
-
   });
 
   return (
@@ -93,13 +120,29 @@ export default function ListaCondominios() {
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{condominio.cidade_condominio}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{condominio.uf_condominio}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{condominio.tipo_condominio}</td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500"></td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
+                    <DropdownActions
+                      onDelete={() => {
+                        setSelectedId(condominio.id_condominio);
+                        console.log("ID que estou enviando para excluir:", condominio.id_condominio);
+                        setSelectedName(condominio.nome_condominio);
+                        setDeleteDialogOpen(true);
+                      }}
+                    />
+                  </td>
                 </tr>
               ))
             )}
           </tbody>
         </table>
       </div>
+      <ConfirmDialog
+        isOpen={deleteDialogOpen}
+        setIsOpen={setDeleteDialogOpen}
+        title={`Excluir ${selectedName}?`}
+        description="Tem certeza que deseja excluir este condomínio? Esta ação não pode ser desfeita."
+        onConfirm={handleDeleteConfirm}
+      />
     </div>
   );
 }
