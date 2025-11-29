@@ -1,11 +1,22 @@
 "use client";
 
+<<<<<<< HEAD
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { FiMoreVertical } from "react-icons/fi";
 
 export function DropdownActions({
   onDelete,
 }: {
+=======
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu"; //é a lib que cuida de acessibilidade e navegação via teclado.
+import { FiMoreVertical } from "react-icons/fi";
+
+export function DropdownActions({
+//   onEdit,
+  onDelete,
+}: {
+//   onEdit: () => void;
+>>>>>>> 0350161bae8c1adbf29778f0d669f36b102d0508
   onDelete: () => void;
 }) {
   return (
@@ -23,12 +34,20 @@ export function DropdownActions({
           align="end"
         >
           <DropdownMenu.Item
+<<<<<<< HEAD
+=======
+            // onClick={onEdit}
+>>>>>>> 0350161bae8c1adbf29778f0d669f36b102d0508
             className="w-full px-3 py-2 rounded-md hover:bg-gray-100 cursor-pointer"
           >
             Editar
           </DropdownMenu.Item>
           <DropdownMenu.Item
+<<<<<<< HEAD
             onSelect={onDelete}
+=======
+            onClick={onDelete}
+>>>>>>> 0350161bae8c1adbf29778f0d669f36b102d0508
             className="w-full px-3 py-2 rounded-md hover:bg-red-100 text-red-600 cursor-pointer"
           >
             Excluir
@@ -37,4 +56,8 @@ export function DropdownActions({
       </DropdownMenu.Portal>
     </DropdownMenu.Root>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 0350161bae8c1adbf29778f0d669f36b102d0508
