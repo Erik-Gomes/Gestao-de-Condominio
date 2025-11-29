@@ -5,6 +5,7 @@ import { ICondominio } from '@/services/condominio.service';
 import { DropdownActions } from "@/components/dropdown";
 import { ConfirmDialog } from "@/components/confirmDialog";
 import { showToast } from '@/components/toastNotification';
+import { Toaster } from 'sonner';
 
 export default function ListaCondominios() {
   const [condominios, setCondominios]= useState<ICondominio[]>([])
@@ -48,6 +49,7 @@ export default function ListaCondominios() {
         if (result.success) {
             // Remove o item da lista visualmente sem precisar recarregar
             setCondominios((prev) => prev.filter((c) => c.id_condominio !== selectedId));
+
             showToast("success", "Condomínio excluído com sucesso!");
         } else {
             showToast("error", result.error || "Erro ao excluir condomínio.");
@@ -143,6 +145,7 @@ export default function ListaCondominios() {
         description="Tem certeza que deseja excluir este condomínio? Esta ação não pode ser desfeita."
         onConfirm={handleDeleteConfirm}
       />
+      <Toaster richColors position="top-right" />
     </div>
   );
 }
