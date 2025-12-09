@@ -2,18 +2,13 @@
 
 import { useEffect, useState } from 'react'  //useState é uma função do React que permite a um componente ter estado interno. 
 import { ICondominio } from '@/services/condominio.service';
-<<<<<<< HEAD
 import { DropdownActions } from "@/components/dropdown";
+import EditCondominioModal from '@/components/editCondominioModal';
 import { ConfirmDialog } from "@/components/confirmDialog";
 import { showToast } from '@/components/toastNotification';
 import { Toaster } from 'sonner';
-=======
-import { FaSearch } from "react-icons/fa";
-import { DropdownActions } from "@/components/dropdown";
-import { ConfirmDialog } from "@/components/confirmDialog";
-import { showToast } from "@/components/toastNotification";
-// import { ICondominio } from '@/services/condominio.local.service'; //LOCAL REQUEST
->>>>>>> 0350161bae8c1adbf29778f0d669f36b102d0508
+import { FaPlus, FaSearch } from 'react-icons/fa';
+import Link from 'next/link';
 
 export default function ListaCondominios() {
   const [condominios, setCondominios]= useState<ICondominio[]>([])
@@ -24,49 +19,57 @@ export default function ListaCondominios() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false); // status para abrir dialog 
   const [selectedId, setSelectedId] = useState<number | null>(null);  // id do condominio
   const [selectedName, setSelectedName] = useState<string | null>(null); // select nome do condominio
+  const [selectedCondominio, setSelectedCondominio] = useState<any>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
-<<<<<<< HEAD
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null); 
-  const [selectedName, setSelectedName] = useState("");
+  function handleUpdate(condominio: any) {
+  setSelectedCondominio(condominio);
+  setModalOpen(true);
+  }
+
+  async function handleSave(updatedData: any) {
+  console.log("Salvar alterações:", updatedData);
+
+  try {
+    const response = await fetch(`/api/condominios/${updatedData.id_condominio}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro ao atualizar condomínio");
+    }
+
+    const result = await response.json();
+
+    fetchCondominios(); // Recarrega a lista após salvar
+    setModalOpen(false);
+  } catch (error) {
+    console.error("Erro ao salvar condomínio:", error);
+  }
+}
+
+  async function fetchCondominios() {
+    try {
+      const response = await fetch("/api/condominios", { cache: "no-store" });
+      const { data, success, error } = await response.json();
+
+      if (!success) throw new Error(error ?? "Erro ao buscar condomínios");
+
+      setCondominios(data);
+    } catch (e: any) {
+      setErro(e.message ?? "Erro inesperado");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
-=======
-   // Filtra os condomínios com base no termo de busca digitado
-  const condominiosFiltrados = condominios.filter((c) => {
-    const query = searchQuery.toLowerCase();
-    return (
-      c.nome_condominio.toLowerCase().includes(query) || // verifica se o resultado de query esta incluido dentro de c.nome_condominio
-      c.cidade_condominio.toLowerCase().includes(query) ||
-      c.uf_condominio.toLowerCase().includes(query) ||
-      c.tipo_condominio.toLowerCase().includes(query) ||
-      c.endereco_condominio.toLowerCase().includes(query)
-    );
-  });
-  
-  
+    fetchCondominios();
+  }, []);
 
-  useEffect(() => { //hook que executa uma função quando o componente é montado.
->>>>>>> 0350161bae8c1adbf29778f0d669f36b102d0508
-    const buscarCondominios = async () => {
-      try {
-        const response = await fetch("/api/condominios", { cache: "no-store" });
-        const {data, success, count, error} = await response.json();
 
-        if (!success) throw new Error(error ?? "Erro ao buscar condomínios"); // quando acionado o catch é executado
-        setCondominios(data);
-
-      } catch (e: any) {
-        setErro(e.message ?? "Erro inesperado");
-      } finally {
-        setLoading(false);
-      }      
-    };
-    buscarCondominios()
-  }, []);// [] = executa apenas uma vez, quando o componente é montado.
-  // Caso haja alguma váriavel no array, o efeito será executado novamente sempre que essa variável mudar.
-
-<<<<<<< HEAD
   const handleDeleteConfirm = async () => {
     if (!selectedId) return;
 
@@ -94,55 +97,16 @@ export default function ListaCondominios() {
   };
 
   const condominiosFiltrados = condominios.filter((condominio) =>{
-    const termoBusca = query.trim().toLowerCase();
+    const termoBusca = searchQuery.trim().toLowerCase();
 
     return (
-      condominio.nome_condominio.toLowerCase().includes(termoBusca) ||
-      condominio.endereco_condominio.toLowerCase().includes(termoBusca) ||
-      condominio.cidade_condominio.toLowerCase().includes(termoBusca) ||
-      condominio.uf_condominio.toLowerCase().includes(termoBusca)||
-      condominio.tipo_condominio.toLowerCase().includes(termoBusca)
+      (condominio.nome_condominio || "'").toLowerCase().includes(termoBusca) ||
+      (condominio.endereco_condominio || "").toLowerCase().includes(termoBusca) ||
+      (condominio.cidade_condominio || "").toLowerCase().includes(termoBusca) ||
+      (condominio.uf_condominio || "").toLowerCase().includes(termoBusca)||
+      (condominio.tipo_condominio || "").toLowerCase().includes(termoBusca)
     );
   });
-=======
-  const confirmarExclusao = async () => {
-    if (!selectedId) return;
-
-    
-    try {
-      console.log(selectedId)
-      const response = await fetch(`/api/condominios/${selectedId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        cache: "no-store",
-      });
-      const {data, success, count, error} = await response.json();
-
-      console.log("Dados",data, success, count, error)
-      if (!success){
-        throw new Error(error ?? "Erro ao buscar condomínios"); // quando acionado o catch é executado
-      }
-
-      setCondominios(prev =>
-        prev.filter((c) => c.id_condominio !== selectedId)
-      );
-      console.log("SUCESSO")
-      showToast({ type: "success", message: "Condomínio excluído com sucesso",description: "teste" });
-      setDeleteDialogOpen(false);
-      setSelectedId(null);
-      // setIsEditing(false);
-
-    } catch (e: any) {
-      showToast({ type: "error", message: e.message ?? "Erro inesperado"});
-    } finally {
-      setLoading(false);
-    }      
-  
-
-  };
->>>>>>> 0350161bae8c1adbf29778f0d669f36b102d0508
 
   return (
     <div className="p-6 max-w-full">
@@ -150,7 +114,7 @@ export default function ListaCondominios() {
         <h1 className="text-xl font-semibold">Condomínios</h1>
       </div>
 
-      {/* Barra de busca e filtros */}
+      {/* Barra de busca e Add condomínios*/}
       <div className="mb-4 flex justify-between gap-4">
         <div className="relative w-64">
           <span className="absolute inset-y-0 left-3 flex items-center">
@@ -163,6 +127,13 @@ export default function ListaCondominios() {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10 pr-4 py-2 w-full rounded-md border border-gray-200 focus:outline-none focus:ring-1 focus:ring-primary text-sm"
           />
+        </div>
+        <div className="relative w-10">
+          <Link href="/condominios/novo">
+            <span className="absolute inset-y-0 left-3 flex items-center">
+              <FaPlus className="h-5 w-5 text-gray-400 bg-gray-100 "/>
+            </span>
+          </Link>
         </div>
       </div>
 
@@ -209,16 +180,12 @@ export default function ListaCondominios() {
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{condominio.uf_condominio}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{condominio.tipo_condominio}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-500">
-<<<<<<< HEAD
                     <DropdownActions
+                      onUpdate={() => 
+                        handleUpdate(condominio)
+                      }
                       onDelete={() => {
                         setSelectedId(condominio.id_condominio);
-                        console.log("ID que estou enviando para excluir:", condominio.id_condominio);
-=======
-                    <DropdownActions      
-                      onDelete={() => {
-                        setSelectedId(condominio.id_condominio);
->>>>>>> 0350161bae8c1adbf29778f0d669f36b102d0508
                         setSelectedName(condominio.nome_condominio);
                         setDeleteDialogOpen(true);
                       }}
@@ -230,7 +197,6 @@ export default function ListaCondominios() {
           </tbody>
         </table>
       </div>
-<<<<<<< HEAD
       <ConfirmDialog
         isOpen={deleteDialogOpen}
         setIsOpen={setDeleteDialogOpen}
@@ -238,23 +204,14 @@ export default function ListaCondominios() {
         description="Tem certeza que deseja excluir este condomínio? Esta ação não pode ser desfeita."
         onConfirm={handleDeleteConfirm}
       />
-      <Toaster richColors position="top-right" />
-=======
-       <ConfirmDialog
-        title="Excluir condomínio"
-        description={
-          <>
-            Tem certeza de que deseja excluir o condomínio {" "}
-            <strong className="text-gray-800"> {selectedName}</strong>? 
-            <br />
-            <span className="text-red-800">Todos os moradores vinculados a este condomínio também serão excluídos.Esta ação não poderá ser desfeita.</span> 
-          </>
-        }
-        isOpen={deleteDialogOpen}
-        setIsOpen={setDeleteDialogOpen}
-        onConfirm={confirmarExclusao}
+      <EditCondominioModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        condominio={selectedCondominio}
+        onSave={handleSave}
       />
->>>>>>> 0350161bae8c1adbf29778f0d669f36b102d0508
+
+      <Toaster richColors position="top-right" />
     </div>
   );
 }
