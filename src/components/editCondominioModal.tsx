@@ -13,7 +13,6 @@ export default function EditCondominioModal({
   condominio: any;
   onSave: (data: any) => void;
 }) {
-
   const [form, setForm] = useState(condominio ?? {});
 
   useEffect(() => {
@@ -36,22 +35,28 @@ export default function EditCondominioModal({
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg w-[400px] shadow-xl">
-        <h2 className="text-xl font-semibold mb-4">Editar Condomínio</h2>
+        <h2 className="text-xl font-semibold text-stone-700 mb-4">
+          Editar Condomínio
+        </h2>
 
         <div className="space-y-3">
-         <div>
-            <label className="block text-sm font-medium text-gray-700">Nome do Condomínio</label>
+          <div>
+            <label className="block text-sm font-medium text-stone-500 ">
+              Nome do Condomínio
+            </label>
             <input
               name="nome_condominio"
               value={form.nome_condominio ?? ""}
               onChange={handleChange}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2 "
               placeholder="Nome do condomínio"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Endereço</label>
+            <label className="block text-sm font-medium text-stone-500">
+              Endereço
+            </label>
             <input
               name="endereco_condominio"
               value={form.endereco_condominio ?? ""}
@@ -63,7 +68,9 @@ export default function EditCondominioModal({
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="md:col-span-3">
-              <label className="block text-sm font-medium text-gray-700">Cidade</label>
+              <label className="block text-sm font-medium text-stone-500">
+                Cidade
+              </label>
               <input
                 name="cidade_condominio"
                 value={form.cidade_condominio ?? ""}
@@ -72,16 +79,18 @@ export default function EditCondominioModal({
                 placeholder="Ex: Campinas"
               />
             </div>
-            
+
             <div>
-              <label className="block text-sm font-medium text-gray-700">UF</label>
+              <label className="block text-sm font-medium text-stone-500">
+                UF
+              </label>
               <select
                 name="uf_condominio"
                 value={form.uf_condominio ?? ""}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                   setForm({ ...form, [e.target.name]: e.target.value })
                 }
-                className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-white"
+                className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-white "
                 defaultValue=""
               >
                 <option value="" disabled>
@@ -96,13 +105,15 @@ export default function EditCondominioModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">Tipo</label>
+            <label className="block text-sm font-medium text-stone-500">
+              Tipo
+            </label>
             <select
               name="tipo_condominio"
               value={form.tipo_condominio}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                  setForm({ ...form, [e.target.name]: e.target.value })
-                }
+                setForm({ ...form, [e.target.name]: e.target.value })
+              }
               className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-white"
               defaultValue="Residencial"
             >
@@ -115,14 +126,18 @@ export default function EditCondominioModal({
 
         <div className="flex justify-end gap-2 mt-4">
           <button
-            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+            className="px-4 py-2 bg-gray-200 rounded 
+            hover:bg-gray-300
+            hover:cursor-pointer"
             onClick={onClose}
           >
             Cancelar
           </button>
 
           <button
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className="px-4 py-2 text-white rounded-md
+            bg-gradient-to-r from-stone-400 to-stone-600
+           hover:opacity-60 transition-all hover:cursor-pointer"
             onClick={handleSubmit}
           >
             Salvar

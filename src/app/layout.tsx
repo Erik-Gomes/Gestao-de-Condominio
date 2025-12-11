@@ -26,9 +26,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
   const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
   const showMenu = session ? true : false;
 
@@ -40,7 +41,7 @@ export default async function RootLayout({
         {/* Menu fixo à esquerda */}
         {showMenu && <Menu />}
 
-        <div className={`${showMenu ? "ml-64" : ""} flex-1 p-6`}>{children}</div>
+        <div className={`${showMenu ? "ml-64" : ""} flex-1`}>{children}</div>
         {/* {children} */}
       </body>
     </html>

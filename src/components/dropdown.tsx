@@ -4,7 +4,7 @@ import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { FiMoreVertical } from "react-icons/fi";
 
 export function DropdownActions({
-  onDelete, 
+  onDelete,
   onUpdate,
 }: {
   onDelete: () => void;
@@ -13,7 +13,7 @@ export function DropdownActions({
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
-        <button className="text-gray-500 hover:text-black focus:outline-none">
+        <button className="text-gray-500 hover:text-black focus:outline-none hover:cursor-pointer">
           <FiMoreVertical className="h-5 w-5" />
         </button>
       </DropdownMenu.Trigger>
