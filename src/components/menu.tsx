@@ -60,15 +60,15 @@ export default function Menu() {
 
         <hr className="my-4 border-gray-100" />
 
-        <div>
+        <div className="group">
           <ul className="space-y-2">
             <li>
               <button
                 type="button"
                 onClick={logout}
-                className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-2 text-left text-stone-800 transition-all hover:bg-gray-100"
+                className="flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-2 text-left text-stone-800 transition-all hover:bg-gray-100 group-hover:text-red-600"
               >
-                <FaSignOutAlt className="h-4 w-4 font-bold text-stone-800" />
+                <FaSignOutAlt className="h-4 w-4 font-bold text-stone-800 group-hover:text-red-600" />
                 Sair
               </button>
             </li>

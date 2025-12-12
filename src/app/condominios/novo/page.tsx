@@ -1,3 +1,4 @@
+import CustomSelect from "@/components/customSelect";
 import { createCondominio } from "../actions";
 
 export default function NovoCondominio() {
@@ -52,41 +53,23 @@ export default function NovoCondominio() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              UF
-            </label>
-            <select
+            <CustomSelect
+              label="UF"
               name="uf_condominio"
-              required
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-white"
-              defaultValue=""
-            >
-              <option value="" disabled>
-                Selecione
-              </option>
-              <option value="SP">SP</option>
-              <option value="RJ">RJ</option>
-              <option value="MG">MG</option>
-              {/* Adicione outros estados conforme necessário */}
-            </select>
+              options={["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"]}
+              defaultValue="SP"
+            ></CustomSelect>
           </div>
         </div>
 
         {/* Tipo */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Tipo
-          </label>
-          <select
+          <CustomSelect
+            label="Tipo de Condomínio"
             name="tipo_condominio"
-            required
-            className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-white"
-            defaultValue="Residencial"
+            options={["Residencial", "Comercial", "Misto"]}
           >
-            <option value="Residencial">Residencial</option>
-            <option value="Comercial">Comercial</option>
-            <option value="Misto">Misto</option>
-          </select>
+          </CustomSelect>
         </div>
 
         {/* Botões de Ação */}

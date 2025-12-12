@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import CustomSelect from "./customSelect";
 
 export default function EditCondominioModal({
   isOpen,
@@ -32,13 +33,26 @@ export default function EditCondominioModal({
     onClose();
   }
 
+  // --- NOVA FUNÇÃO ---
+  // Verifica se o clique foi exatamente no fundo escuro
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    // 1. Adicionamos o onClick aqui no Overlay
+    <div 
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      onClick={handleOverlayClick} 
+    >
       <div className="bg-white p-6 rounded-lg w-[400px] shadow-xl">
         <h2 className="text-xl font-semibold text-stone-700 mb-4">
           Editar Condomínio
         </h2>
 
+        {/* ... Restante do seu código (inputs, selects, etc) ... */}
         <div className="space-y-3">
           <div>
             <label className="block text-sm font-medium text-stone-500 ">
@@ -81,63 +95,43 @@ export default function EditCondominioModal({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-stone-500">
-                UF
-              </label>
-              <select
+              <CustomSelect
+                label="UF"
                 name="uf_condominio"
+                options={["AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"]}
                 value={form.uf_condominio ?? ""}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                   setForm({ ...form, [e.target.name]: e.target.value })
                 }
-                className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-white "
-                defaultValue=""
               >
-                <option value="" disabled>
-                  Selecione
-                </option>
-                <option value="SP">SP</option>
-                <option value="RJ">RJ</option>
-                <option value="MG">MG</option>
-                {/* Adicione outros estados conforme necessário */}
-              </select>
+              </CustomSelect>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-stone-500">
-              Tipo
-            </label>
-            <select
+            <CustomSelect
+              label="Tipo"
               name="tipo_condominio"
-              value={form.tipo_condominio}
+              options={["Residencial", "Comercial", "Misto"]}
+              value={form.tipo_condominio ?? ""}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                 setForm({ ...form, [e.target.name]: e.target.value })
               }
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2 bg-white"
-              defaultValue="Residencial"
             >
-              <option value="Residencial">Residencial</option>
-              <option value="Comercial">Comercial</option>
-              <option value="Misto">Misto</option>
-            </select>
+            </CustomSelect>
           </div>
         </div>
 
         <div className="flex justify-end gap-2 mt-4">
           <button
-            className="px-4 py-2 bg-gray-200 rounded 
-            hover:bg-gray-300
-            hover:cursor-pointer"
+            className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 hover:cursor-pointer"
             onClick={onClose}
           >
             Cancelar
           </button>
 
           <button
-            className="px-4 py-2 text-white rounded-md
-            bg-gradient-to-r from-stone-400 to-stone-600
-           hover:opacity-60 transition-all hover:cursor-pointer"
+            className="px-4 py-2 text-white rounded-md bg-gradient-to-r from-stone-400 to-stone-600 hover:opacity-60 transition-all hover:cursor-pointer"
             onClick={handleSubmit}
           >
             Salvar

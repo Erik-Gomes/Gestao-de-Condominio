@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { createUsuario } from "@/app/usuarios/novo/actions";
 import Link from "next/link";
 import { FaArrowLeft, FaSave, FaCheckCircle } from "react-icons/fa";
+import CustomSelect from "@/components/customSelect";
 
 export default function NovoUsuarioPage() {
   const router = useRouter();
@@ -111,17 +112,14 @@ export default function NovoUsuarioPage() {
           </div>
 
           <div>
-            <label className="block mb-1 text-stone-700 text-sm font-medium">
-              Status
-            </label>
-            <select
+            <CustomSelect
+              label="Status"
               name="status"
               disabled={loading || success}
               className="w-full border border-stone-300 rounded-md px-3 py-2"
+              options={["Ativo", "Inativo"]}
             >
-              <option value="Ativo">Ativo</option>
-              <option value="Inativo">Inativo</option>
-            </select>
+            </CustomSelect>
           </div>
 
           <div className="flex justify-end gap-3 mt-6 pt-4 border-t">

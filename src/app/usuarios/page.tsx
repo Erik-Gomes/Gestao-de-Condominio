@@ -9,6 +9,7 @@ import { Toaster } from "sonner";
 import { FaSearch, FaPlus } from "react-icons/fa";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import EditUsuarioModal from "@/components/editUsuarioModal";
 
 
 export default function ListaUsuario() {
@@ -16,7 +17,8 @@ export default function ListaUsuario() {
   const [erro, setErro] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
-
+  const [selectedUsuario, setSelectedUsuario] = useState<any>(null);
+  const [modalOpen, setModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [selectedName, setSelectedName] = useState("");
@@ -40,6 +42,11 @@ export default function ListaUsuario() {
     };
     buscarUsuarios();
   }, []);
+
+  function handleUpdate(usuario: any) {
+    setSelectedUsuario(usuario);
+    setModalOpen(true);
+  }
 
   const handleDeleteConfirm = async () => {
     if (!selectedId) return;
@@ -72,6 +79,45 @@ export default function ListaUsuario() {
     );
   });
 
+  const handleSave = async (data: IUsuario) => {
+    // 1. DEBUG: Verifique no Console do navegador (F12) o que está chegando aqui
+    console.log("Dados recebidos para salvar:", data);
+
+    // 2. VERIFICAÇÃO DE SEGURANÇA: Se não tiver ID, nem tenta chamar a API
+    if (!data.id) {
+      console.error("Erro: ID do usuário está faltando!", data);
+      showToast("error", "Erro interno: ID do usuário não identificado.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/usuarios/${data.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      
+      // 3. DEBUG: Verifique o que o servidor respondeu
+      console.log("Resposta do servidor:", result);
+
+      if (result.success) {
+        setUsuarios((prev) =>
+          prev.map((u) => (u.id === data.id ? data : u))
+        );
+        showToast("success", "Usuário atualizado com sucesso!");
+        setModalOpen(false);
+      } else {
+        // Mostra o erro real que veio da API
+        showToast("error", result.error || "Erro ao atualizar usuário.");
+      }
+    } catch (error) {
+      console.error("Erro de conexão:", error);
+      showToast("error", "Erro de conexão ao tentar atualizar.");
+    }
+  };
+
   return (
     <div className="p-6 max-w-full bg-gradient-to-b from-stone-300 to-stone-400 min-h-screen">
 
@@ -79,14 +125,7 @@ export default function ListaUsuario() {
       <div className="mb-4 flex items-center justify-between gap-4">
         <h1 className="text-xl font-semibold text-stone-700">Usuários</h1>
 
-        <Link
-          href="/usuarios/novo"
-          className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-md 
-                     hover:bg-primary/90 transition-all shadow-sm"
-        >
-          <FaPlus className="text-sm" />
-          <span className="text-sm font-medium">Adicionar</span>
-        </Link>
+        
       </div>
 
       {/* Barra de busca */}
@@ -104,13 +143,12 @@ export default function ListaUsuario() {
               focus:outline-none focus:ring-1 focus:ring-primary text-sm"
           />
         </div>
-        <div className="relative w-10">
-          <Link href="/usuarios/novo">
-            <span className="absolute inset-y-0 left-3 flex items-center">
-              <FaPlus className="h-5 w-5 text-stone-700" />
-            </span>
-          </Link>
-        </div>
+        <Link
+          href="/usuarios/novo"
+          className="flex items-center gap-2 bg-stone-200 text-white px-4 py-2 rounded-md hover:bg-stone-400 transition-all shadow-md border-solid border-1 border-stone-400" >
+          <FaPlus className="text-sm text-stone-700" />
+          <span className="text-sm font-medium text-stone-700">Adicionar</span>
+        </Link>
       </div>
 
       {/* Tabela */}
@@ -170,9 +208,7 @@ export default function ListaUsuario() {
                         setSelectedName(usuario.nome);
                         setDeleteDialogOpen(true);
                       }}
-                      onUpdate={() => {
-                        router.push(`/usuarios/editar/${usuario.id}`);
-                      }}
+                      onUpdate={() => handleUpdate(usuario)}
                     />
 
                   </td>
@@ -191,6 +227,13 @@ export default function ListaUsuario() {
         description="Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita."
         onConfirm={handleDeleteConfirm}
       />
+      <EditUsuarioModal
+              isOpen={modalOpen}
+              onClose={() => setModalOpen(false)}
+              usuario={selectedUsuario}
+              onSave={handleSave}
+      />
+
 
       <Toaster richColors position="top-right" />
     </div>

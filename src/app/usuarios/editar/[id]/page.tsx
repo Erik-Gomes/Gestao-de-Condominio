@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
+import Link from "next/link";
+import { FaArrowLeft } from "react-icons/fa";
 
 export default function EditarUsuarioPage({
   params,
@@ -83,10 +85,19 @@ export default function EditarUsuarioPage({
 
   return (
     <div className="max-w-md mx-auto py-10">
-      <h1 className="text-2xl font-bold mb-6 text-stone-700">
-        Editar Usuário
-      </h1>
+      <div className="justify-between gap-3 mb-6 flex items-center content-center"> 
+        <h1 className="text-2xl font-bold text-stone-700 content-center">
+          Editar Usuário
+        </h1>
 
+        <Link
+            href="/usuarios"
+            className=" h-10 w-30 flex items-center gap-2 text-stone-700 bg-stone-200 px-3 py-2 rounded-md hover:bg-stone-300 transition-all shadow-sm"
+          >
+            <FaArrowLeft className="text-sm" />
+            <span className="text-sm">Voltar</span>
+        </Link>
+      </div>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           name="nome"

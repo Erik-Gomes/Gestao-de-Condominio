@@ -134,13 +134,13 @@ export default function ListaCondominios() {
             focus:outline-none focus:ring-1 focus:ring-primary text-sm"
           />
         </div>
-        <div className="relative w-10">
-          <Link href="/condominios/novo">
-            <span className="absolute inset-y-0 left-3 flex items-center">
-              <FaPlus className="h-5 w-5 text-stone-700" />
-            </span>
-          </Link>
-        </div>
+        <Link
+          href="/condominios/novo"
+          className="flex items-center gap-2 bg-stone-200 text-white px-4 py-2 rounded-md hover:bg-stone-400 transition-all shadow-md border-solid border-1 border-stone-400" >
+          <FaPlus className="text-sm text-stone-700" />
+          <span className="text-sm font-medium text-stone-700">Adicionar</span>
+        </Link>
+        
       </div>
 
       {/* Tabela de condomínios */}
