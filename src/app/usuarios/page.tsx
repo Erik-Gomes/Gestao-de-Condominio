@@ -7,7 +7,8 @@ import { DropdownActions } from "@/components/dropdown";
 import { ConfirmDialog } from "@/components/confirmDialog";
 import { showToast } from "@/components/toastNotification";
 import { Toaster } from "sonner";
-import { FaSearch } from "react-icons/fa";
+import { FaPlus, FaSearch } from "react-icons/fa";
+import Link from "next/link";
 
 export default function ListaUsuario() {
   // Ajuste do estado para Usuarios
@@ -93,6 +94,13 @@ export default function ListaUsuario() {
             className="pl-10 pr-4 py-2 w-full rounded-md font-medium text-stone-500 
             focus:outline-none focus:ring-1 focus:ring-primary text-sm"
           />
+        </div>
+        <div className="relative w-10">
+          <Link href="/usuarios/novo">
+            <span className="absolute inset-y-0 left-3 flex items-center">
+              <FaPlus className="h-5 w-5 text-stone-700" />
+            </span>
+          </Link>
         </div>
       </div>
 
