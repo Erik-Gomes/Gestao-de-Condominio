@@ -1,29 +1,57 @@
-'use server'
+"use server";
 
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
-export async function createCondominio(formData: FormData) {
+interface CreateCondominioResult {
+  success: boolean;
+  message: string;
+}
+
+export async function createCondominio(
+  formData: FormData
+): Promise<CreateCondominioResult> {
   const supabase = await createClient();
 
-  const data = {
-    nome_condominio: formData.get("nome_condominio") as string,
-    endereco_condominio: formData.get("endereco_condominio") as string,
-    cidade_condominio: formData.get("cidade_condominio") as string,
-    uf_condominio: formData.get("uf_condominio") as string,
-    tipo_condominio: formData.get("tipo_condominio") as string,
-  };
+  const nome_condominio = String(formData.get("nome_condominio") ?? "").trim();
+  const endereco_condominio = String(formData.get("endereco_condominio") ?? "").trim();
+  const cidade_condominio = String(formData.get("cidade_condominio") ?? "").trim();
+  const uf_condominio = String(formData.get("uf_condominio") ?? "").trim();
+  const tipo_condominio = String(formData.get("tipo_condominio") ?? "").trim();
 
-  const { error } = await supabase.from("condominio").insert(data);
-
-  if (error) {
-    console.error("Erro ao criar:", error);
-    // Em um cenário real, você retornaria o erro para exibir na tela
-    throw new Error("Falha ao criar condomínio");
+  if (
+    !nome_condominio ||
+    !endereco_condominio ||
+    !cidade_condominio ||
+    !uf_condominio ||
+    !tipo_condominio
+  ) {
+    return {
+      success: false,
+      message: "Preencha todos os campos obrigatórios",
+    };
   }
 
-  // Atualiza a lista de condomínios e redireciona
+  const { error } = await supabase.from("condominio").insert({
+    nome_condominio,
+    endereco_condominio,
+    cidade_condominio,
+    uf_condominio,
+    tipo_condominio,
+  });
+
+  if (error) {
+    console.error("[createCondominio]", error);
+    return {
+      success: false,
+      message: "Erro ao criar condomínio",
+    };
+  }
+
   revalidatePath("/condominios");
-  redirect("/condominios");
+
+  return {
+    success: true,
+    message: "Condomínio criado com sucesso",
+  };
 }
